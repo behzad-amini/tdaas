@@ -32,7 +32,7 @@ app.get('/',function(req,res){
     res.render('home');
 });
 
-app.get('/jobmanager',function(req,res){
+app.get('/jobmanager',isLoggedIn,function(req,res){
     res.render('jobmanager');
 });
 
@@ -78,6 +78,24 @@ app.post('/login',passport.authenticate("local",{
     failureRedirect: '/login'
 }),function(req,res){
 })
+
+//logout
+//=============
+app.get('/logout',function(req, res) {
+    req.logout();
+    res.redirect('/');
+});
+
+//is logged in middleware
+//=============
+function isLoggedIn(req,res,next){
+    
+    if(req.isAuthenticated()){
+        return next();
+    }    
+    
+    res.render('login');
+}
 
 
 
