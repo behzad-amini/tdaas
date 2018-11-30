@@ -21,6 +21,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(bodyParser.urlencoded({extended: true}));
 
+passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 //====================
@@ -31,13 +32,17 @@ app.get('/',function(req,res){
     res.render('home');
 });
 
-app.get('/jm',function(req,res){
+app.get('/jobmanager',function(req,res){
     res.render('jobmanager');
 });
 
 //=======================
 // Authentication Routs
 //=======================
+
+
+//registeration
+//=============
 app.get('/register', function(req, res) {
     res.render('register');    
 } );
@@ -60,9 +65,19 @@ app.post('/register',function(req,res){
                         });
                     }
     )
-    
 });
 
+//login
+//=============
+app.get('/login',function(req, res) {
+    res.render('login');
+});
+
+app.post('/login',passport.authenticate("local",{
+    successRedirect: '/jobmanager',
+    failureRedirect: '/login'
+}),function(req,res){
+})
 
 
 
