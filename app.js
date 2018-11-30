@@ -3,6 +3,7 @@ var express                 = require('express'),
     passport                = require('passport'),
     bodyParser              = require('body-parser'),
     User                    = require('./models/user'),
+    Item                    = require('./models/item'),    
     LocalStrategy           = require('passport-local'),
     passportLocalMongoose   = require('passport-local-mongoose');
     
@@ -98,9 +99,78 @@ function isLoggedIn(req,res,next){
 }
 
 
+//=======================
+// Item CRUD test
+//=======================
+var desk = new Item({
+    name: 'deskBahal2', 
+    photoAddress:'https://images.neimanmarcus.com/ca/1/products/az/NM-4ACZ_az.jpg'
+})
+
+// Item Save (Create)
+//-----------------------
+desk.save(function(err,deskKhubu){
+   if(err){
+       console.log(err);
+   } else{
+       console.log('desk saved successfully');
+       console.log(deskKhubu);
+   }
+});
+
+// new + save:
+//--------------
+Item.create({
+   name: 'beautiful item',
+   phone: 12345 // this will not be saved because it is not in the schema
+}, function(err, item1){
+    if(err){
+        console.log(err);
+    }else{
+        console.log('saved item br create command');
+        console.log(item1);
+    }
+});
+
+
+// Item find (Read)
+//-----------------------
+
+// All --> leave the object in find empty i.e. {}
+Item.find({},function(err,items){
+    if(err){
+        console.log(err);
+    }else{
+        console.log('found items are:');
+        console.log(items);
+    }
+});
+
+// one --> pass the property to the find i.e. {name='something'}
+Item.find({name:'deskBahal'},function(err,items){
+    if(err){
+        console.log(err);
+    }else{
+        console.log('foun items from name are:');
+        console.log(items);
+    }
+});
+// ---- also item.findById(id,funct...) --- works with the id
+
+// Item Update (U)
+//-----------------------
+
+// Item.findByIdAndUpdate(id, newData, callback)
+// e.g. Item.findByIdAndUpdate(req.body.id, req.body.Item, function(err,item){..})
 
 
 
+
+// Item Delete (D)
+//-----------------------
+
+// Item.findByIdAndRemove(id,  callback)
+// e.g. Item.findByIdAndRemove(req.body.id, function(err){..})
 
 //====================
 app.listen(process.env.PORT,process.env.IP,function(){
